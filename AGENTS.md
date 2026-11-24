@@ -198,3 +198,16 @@ user instruction, not as a native CLI command. All other rules apply.
 - compact: Review shared memory for outdated or redundant information.
   Propose safe reductions without deleting important decisions,
   requirements or verification history.
+
+## 14. Model and Reasoning Strategy
+
+- Use the lowest model capability and reasoning effort that can reliably satisfy the task.
+- Economy tier: routine documentation, simple edits and bounded mechanical tasks.
+- Standard tier: normal implementation, planning, testing and code review. Use this tier by default.
+- Advanced tier: complex architecture, difficult debugging, security-critical changes and unresolved problems.
+- Escalate model capability when evidence indicates that the current tier is insufficient.
+- Avoid repeated unsuccessful attempts with weaker models.
+- When preparing a handoff, recommend an appropriate agent, model tier and reasoning effort, with a brief justification.
+- Do not assume that writing a model recommendation changes the actual runtime model.
+- Do not automatically launch additional agents, enable paid usage or change runtime model configurations without user approval.
+- Prioritize correctness over usage savings.
