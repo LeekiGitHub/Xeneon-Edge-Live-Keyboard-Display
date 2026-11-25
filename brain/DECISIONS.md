@@ -14,6 +14,13 @@
 ```
 
 ## Log
+### D-010 T-006 accepted; preliminary keyboard-detection decisions
+- Date: 2026-11-25 | Status: accepted (RC decisions preliminary until Gate G2) | By: user
+- Context: [T-006](../docs/research/T-006-event-model.md) raised requirement conflicts RC-01..RC-10; nothing is tested.
+- Decision: T-006 closed as completed documentation research; open technical hypotheses are tested in T-007. No separate full review; Codex checks critical assumptions while preparing T-007. Preliminary: RC-01 hardware/firmware detection limits accepted in principle; RC-02 never feign unambiguous physical key detection for ambiguous events; RC-04 account for hardware limits on simultaneous keys; RC-05 input-device selection desirable if technically reliable; RC-06 storing manually defined key-code mappings as profile configuration is allowed and is not recording input histories.
+- Alternatives: separate full review of T-006 (waived).
+- Consequences: PROJECT.md unchanged; final requirement changes at Gate G2 using practical findings. RC-03 and RC-07..RC-10 have no decision. The event and profile model stays a proposal.
+
 ### D-009 T-005 accepted; capture candidates for T-007
 - Date: 2026-11-25 | Status: accepted | By: user
 - Context: Desk research and independent review of global capture were complete; nothing is tested.

@@ -9,7 +9,7 @@
 ## Active
 
 ### T-003 Decide tech stack and initial architecture
-- Priority: P2 | Status: active (plan approved, D-006; Gate G1 passed, D-007; T-005 done, next T-006) | Owner: Claude Code (planner)
+- Priority: P2 | Status: active (plan approved, D-006; Gate G1 passed, D-007; T-005 and T-006 done) | Owner: Claude Code (planner)
 - Acceptance criteria:
   - [ ] Stack and components in [ARCHITECTURE.md](ARCHITECTURE.md), rationale in [DECISIONS.md](DECISIONS.md)
 - Additional criteria (from [PROJECT.md](PROJECT.md) section 8 and D-004; approved with the plan 2026-11-25):
@@ -29,7 +29,7 @@
 - Model plan is a flexible recommendation: Standard by default; agents recommend (never perform) a model switch, with a reason; respect both providers' usage quotas.
 
 #### Technical risks (all `HYP` until researched; impact = effect on architecture or requirements)
-TR-2, TR-3 and TR-4: desk research in the [T-005 report](../docs/research/T-005-global-capture.md); still unverified.
+TR-2, TR-3 and TR-4: desk research in the [T-005 report](../docs/research/T-005-global-capture.md). TR-1 and the event side of TR-7: desk research in the [T-006 report](../docs/research/T-006-event-model.md). All still untested.
 
 | ID | Risk | Impact | Task |
 |---|---|---|---|
@@ -48,14 +48,7 @@ TR-2, TR-3 and TR-4: desk research in the [T-005 report](../docs/research/T-005-
 #### Subtasks (`todo` unless stated; Tier = recommended agent, model tier / effort)
 Order: T-004 -> T-005, T-006 -> T-007 -> T-008 -> T-009 -> T-010, T-011, T-012 -> T-013. T-010 and the content part of T-012 only depend on T-004 and may be pulled forward.
 
-T-004 and T-005 are done (see Done). Assess options only with the T-004 [evaluation frame](../docs/research/T-004-evaluation-frame.md).
-
-##### T-006 Event model and keyboard behaviour
-- Tier: Claude, Standard / high | Depends: T-004
-- Questions: How do physical position, scan/HID code, logical key and character relate per OS? What do the profiled keyboards (Lemokey P1 Pro, Advantage360 SmartSet, Voyager, Moonlander without test hardware, generic TKL) actually send (layers, thumb keys, duplicates, knob)? What can the live view not know, and how should profiles express that? Which limits are stack-independent (KO-1) and affect product requirements? What does the focused training path need?
-- Done when:
-  - [ ] Stack-independent conceptual event model, incl. lost-event handling and the privacy boundary between both data paths
-  - [ ] Limitation list per keyboard model; requirement conflicts raised to the Product Owner
+T-004, T-005 and T-006 are done (see Done). Assess options only with the T-004 [evaluation frame](../docs/research/T-004-evaluation-frame.md).
 
 ##### T-007 Prototype P1: Windows capture
 - Tier: Codex, Standard / high | Depends: T-005, T-006
@@ -63,6 +56,8 @@ T-004 and T-005 are done (see Done). Assess options only with the T-004 [evaluat
 - Questions: Verify TR-1 and TR-3: candidate APIs with a foreground app, elevated window, UAC/lock screen, key bursts, hold/repeat, AltGr, knob; behaviour of installed antivirus.
 - Preference: use tools already shipped with Windows; no install unless shown necessary.
 - Input from T-005 (D-009): Raw Input preferred test candidate, low-level hook as comparison; claims, trial order and test rules in [report section 8](../docs/research/T-005-global-capture.md#8-prototype-claims-and-test-method).
+- Input from T-006 (proposed): scenarios WP-16..WP-28, MP-10, MP-11 and the no-configuration-change rule in [report section 11](../docs/research/T-006-event-model.md#11-controlled-test-scenarios-for-t-007); keyboard questions Q1-Q5 in section 12.
+- Input from D-010: test the open technical hypotheses of T-006; check critical assumptions during preparation; reported keyboard configurations in report section 12.1 (firmware versions still unknown).
 - Done when:
   - [ ] Test protocol with `VER` results on the user's hardware
   - [ ] Go/no-go and requirement clarifications decided (Gate G2)
@@ -188,3 +183,13 @@ Final approval (2026-11-24, user): R-03/R-04 scenarios and the UI note on captur
   - [x] List of claims that need a prototype
 - Result: [report](../docs/research/T-005-global-capture.md). Windows, macOS and native X11: conditional. Wayland: unknown (no general E5-compliant passive background path demonstrated for the live viewer). Test candidates: D-009.
 - Verification (2026-11-25): desk research; [independent review by Codex](../docs/research/T-005-global-capture.md#11-independent-technical-review-codex-2026-11-25) with all findings adopted into sections 1-10 ([dispositions](../docs/research/T-005-global-capture.md#12-disposition-of-review-findings-claude-code-2026-11-25)). Citation IDs and relative links checked. No installs, prototypes or `VER` results: all capabilities remain practically unverified. Gaps: report section 9.
+
+### T-006 Event model and keyboard behaviour (subtask of T-003)
+- Status: done (2026-11-25, accepted by the Product Owner as completed documentation research) | Owner: Claude Code (author)
+- Tier: Claude, Standard / high | Depends: T-004
+- Questions: How do physical position, scan/HID code, logical key and character relate per OS? What do the profiled keyboards (Lemokey P1 Pro, Advantage360 SmartSet, Voyager, Moonlander without test hardware, generic TKL) actually send (layers, thumb keys, duplicates, knob)? What can the live view not know, and how should profiles express that? Which limits are stack-independent (KO-1) and affect product requirements? What does the focused training path need?
+- Acceptance criteria:
+  - [x] Stack-independent conceptual event model, incl. lost-event handling and the privacy boundary between both data paths
+  - [x] Limitation list per keyboard model; requirement conflicts raised to the Product Owner
+- Result: [report](../docs/research/T-006-event-model.md): event model (section 6) and profile model (section 7), both proposals; limitations (section 5); conflicts RC-01..RC-10 (section 10); preliminary decisions (10.1, D-010); test scenarios WP-16..WP-28, MP-10, MP-11 (section 11); reported keyboard configurations (12.1).
+- Verification (2026-11-25): desk research; cited source IDs and relative links checked by the author. No independent review (waived by the Product Owner). No installs, prototypes or `VER` results: all behaviour remains practically unverified. Gaps: report section 13.

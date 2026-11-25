@@ -4,27 +4,41 @@
 > Separate facts from assumptions. Task status belongs in [TASKS.md](TASKS.md), current state in [STATUS.md](STATUS.md).
 
 - Date: 2026-11-25
-- From: Claude Code (T-005 consolidation) -> To: researcher for T-006
-- Current task: T-005 closed (accepted, D-009); T-006 ready, not started
+- From: Claude Code (researcher, T-006) -> To: Codex (T-007)
+- Current task: T-007 (Windows capture prototype), not started
+- Recommended: Codex, Standard tier / high effort (platform behaviour with privacy and reliability impact; escalate only with evidence)
 
 ## Work Completed
-- Codex review findings consolidated into sections 1-10 of the [T-005 report](../docs/research/T-005-global-capture.md); review history kept (section 11), dispositions in section 12.
-- T-005 moved to Done; D-009 recorded.
-- Claude Code began a `review T-005` request on its own report (reading only); it was interrupted and produced no findings.
+- T-006 accepted and closed (D-010). Added to the [report](../docs/research/T-006-event-model.md): reported keyboard configurations (12.1), preliminary decisions (10.1), configuration notes for scenarios (11).
+- Updated TASKS.md, STATUS.md, DECISIONS.md, LESSONS.md, this file. Commit and push to `origin/main` approved by the user.
 
 ## Verification
-- Documentation only. No installs, prototypes, code or tests; no `VER` results.
-- Checkpoint (2026-11-25): changed files limited to `brain/` and `docs/research/`; review text unchanged apart from a marked history note; citation IDs, relative links, whitespace and personal-data patterns checked. Sources added by Codex were not re-fetched.
-- Commit and push to `origin/main` approved by the user; confirm sync with `git status`.
+- Documentation only. No installs, prototypes, code, tests or device or system changes; no `VER` results.
+- No independent review of T-006 (waived).
+- User statements on hardware are unverified.
+
+## Inputs for T-007
+- [T-005 section 8](../docs/research/T-005-global-capture.md#8-prototype-claims-and-test-method): claims, trial order, test rules 1-10; Raw Input preferred, low-level hook as comparison (D-009).
+- [T-006 section 11](../docs/research/T-006-event-model.md#11-controlled-test-scenarios-for-t-007): WP-16..WP-28, MP-10, MP-11, priorities, configuration notes. Keep keyboards as configured.
+- Configurations: [STATUS.md](STATUS.md). Constraints: [TASKS.md](TASKS.md) plan rules and T-007.
+
+## Critical Assumptions to Check During Preparation
+Check source and testability; do not treat as facts.
+1. Capture leaves other apps' input and dead keys unaltered (T-006 3.3, WP-27; KO-2).
+2. Position codes are stable across host layouts; US backslash and non-US `#` share a scan code (3.3, WP-16).
+3. AltGr, Num Lock, Pause and Print Screen produce extra or multi-part codes; partly `SEC`/`HYP` (WP-17).
+4. Knob and media signals reach each candidate path, possibly outside keyboard scan codes (WP-18, WP-23).
+5. Key-state queries can clear stale keys; limits per T-005 (T-006 6.4, WP-25).
+6. Device identity is reliable enough for input-device selection (RC-05, WP-26).
+7. Duplicate codes on one device cannot be told apart (`HYP`, WP-22).
+8. Lemokey vendor firmware source (`d3c413b`) matches the user's unit (unproven).
+9. Learn mapping in a focused window yields the same codes as background capture (WP-28).
 
 ## Open Issues
-- Report section 9 (gaps) and section 7 (Product Owner findings, suggested for Gate G2).
-- Wayland verdict recorded as `Unknown` and WP-13..WP-15, MP-08/MP-09 numbered by Claude Code (report section 12).
-- Hardware questions: [STATUS.md](STATUS.md). Voyager and Advantage360 firmware versions matter for T-006.
+- Unknown: all firmware versions, Advantage360 profile and remapped keys, Voyager bindings; ask before the respective tests.
+- Report gaps (section 13): Kinesis default layout, official Lemokey manual, ZSA Oryx/factory layouts.
+- Requirement conflicts without decision: RC-03, RC-07..RC-10; preliminary decisions become final at Gate G2.
 
-## Next Action: T-006 (start only on user request)
-- Recommended: Claude, Standard tier, high effort (multi-source research with requirement impact).
-- Scope and completion criteria: T-006 in [TASKS.md](TASKS.md). Report: `docs/research/T-006-event-model.md`.
-- Read first: T-005 report matrix rows C07-C13 and the status/privacy parts of section 7; PROJECT.md F1, F6, NF-Privacy. Load further sections only as needed.
-- Carry over: model enabled / registered / receiving as separate states; lost events must clear highlights; raw repeat and injection behaviour are unverified.
-- Use current official sources with URL and access date; nothing is `VER` without a test. No stack preference, installs or prototypes.
+## Next Action (only on user request)
+1. Codex prepares T-007: scope, acceptance criteria, check of the assumptions above, test protocol, targeted questions to the user.
+2. Wait for approval before creating prototype code, running it, installing anything or changing settings (including the OS input language). macOS variant only after Windows, with separate approvals.
