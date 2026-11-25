@@ -9,7 +9,7 @@
 ## Active
 
 ### T-003 Decide tech stack and initial architecture
-- Priority: P2 | Status: active (plan approved, D-006; Gate G1 passed, D-007; next T-005) | Owner: Claude Code (planner)
+- Priority: P2 | Status: active (plan approved, D-006; Gate G1 passed, D-007; T-005 done, next T-006) | Owner: Claude Code (planner)
 - Acceptance criteria:
   - [ ] Stack and components in [ARCHITECTURE.md](ARCHITECTURE.md), rationale in [DECISIONS.md](DECISIONS.md)
 - Additional criteria (from [PROJECT.md](PROJECT.md) section 8 and D-004; approved with the plan 2026-11-25):
@@ -29,6 +29,8 @@
 - Model plan is a flexible recommendation: Standard by default; agents recommend (never perform) a model switch, with a reason; respect both providers' usage quotas.
 
 #### Technical risks (all `HYP` until researched; impact = effect on architecture or requirements)
+TR-2, TR-3 and TR-4: desk research in the [T-005 report](../docs/research/T-005-global-capture.md); still unverified.
+
 | ID | Risk | Impact | Task |
 |---|---|---|---|
 | TR-1 | Firmware-handled keys (layer/Fn, macros, onboard remaps) may send nothing or identical codes, so a faithful live view of every physical key may be impossible from OS events | Critical (may change requirements) | T-006, T-007 |
@@ -46,15 +48,7 @@
 #### Subtasks (`todo` unless stated; Tier = recommended agent, model tier / effort)
 Order: T-004 -> T-005, T-006 -> T-007 -> T-008 -> T-009 -> T-010, T-011, T-012 -> T-013. T-010 and the content part of T-012 only depend on T-004 and may be pulled forward.
 
-T-004 is done (see Done). Assess options only with its [evaluation frame](../docs/research/T-004-evaluation-frame.md).
-
-##### T-005 Global capture feasibility (Windows, macOS, X11, Wayland)
-- Tier: Claude, Standard / high | Depends: T-004
-- Questions: Which APIs allow passive background capture? Required permissions/privileges? What is invisible (protected contexts)? Press/release/repeat, device identity, rotary events? How is state recovered after lost events? Security implications?
-- Done when:
-  - [ ] Capability matrix per OS with evidence levels and sources
-  - [ ] Per OS: feasible / conditional / not feasible / unknown, with reason
-  - [ ] List of claims that need a prototype
+T-004 and T-005 are done (see Done). Assess options only with the T-004 [evaluation frame](../docs/research/T-004-evaluation-frame.md).
 
 ##### T-006 Event model and keyboard behaviour
 - Tier: Claude, Standard / high | Depends: T-004
@@ -68,6 +62,7 @@ T-004 is done (see Done). Assess options only with its [evaluation frame](../doc
 - macOS variant (approved for the plan, D-007): only if prior research justifies it; after Windows; separate approvals for installs and for execution. Record Mac model and macOS version first.
 - Questions: Verify TR-1 and TR-3: candidate APIs with a foreground app, elevated window, UAC/lock screen, key bursts, hold/repeat, AltGr, knob; behaviour of installed antivirus.
 - Preference: use tools already shipped with Windows; no install unless shown necessary.
+- Input from T-005 (D-009): Raw Input preferred test candidate, low-level hook as comparison; claims, trial order and test rules in [report section 8](../docs/research/T-005-global-capture.md#8-prototype-claims-and-test-method).
 - Done when:
   - [ ] Test protocol with `VER` results on the user's hardware
   - [ ] Go/no-go and requirement clarifications decided (Gate G2)
@@ -182,3 +177,14 @@ Final approval (2026-11-24, user): R-03/R-04 scenarios and the UI note on captur
   - [x] Test hardware inventory recorded
 - Result: [report](../docs/research/T-004-evaluation-frame.md) (G1 changes in its section 7); D-007, D-008.
 - Verification (2026-11-25): hardware and display values by read-only Windows queries plus Product Owner statements; approved weights sum to 100. Weights and thresholds are judgement calls. No web research, tests or independent review (final review is part of T-013).
+
+### T-005 Global capture feasibility (Windows, macOS, X11, Wayland; subtask of T-003)
+- Status: done (2026-11-25, accepted by the Product Owner as a research task) | Owner: Claude Code (author), Codex (independent reviewer)
+- Tier: Claude, Standard / high | Depends: T-004
+- Questions: Which APIs allow passive background capture? Required permissions/privileges? What is invisible (protected contexts)? Press/release/repeat, device identity, rotary events? How is state recovered after lost events? Security implications?
+- Acceptance criteria:
+  - [x] Capability matrix per OS with evidence levels and sources
+  - [x] Per OS: feasible / conditional / not feasible / unknown, with reason
+  - [x] List of claims that need a prototype
+- Result: [report](../docs/research/T-005-global-capture.md). Windows, macOS and native X11: conditional. Wayland: unknown (no general E5-compliant passive background path demonstrated for the live viewer). Test candidates: D-009.
+- Verification (2026-11-25): desk research; [independent review by Codex](../docs/research/T-005-global-capture.md#11-independent-technical-review-codex-2026-11-25) with all findings adopted into sections 1-10 ([dispositions](../docs/research/T-005-global-capture.md#12-disposition-of-review-findings-claude-code-2026-11-25)). Citation IDs and relative links checked. No installs, prototypes or `VER` results: all capabilities remain practically unverified. Gaps: report section 9.

@@ -14,6 +14,13 @@
 ```
 
 ## Log
+### D-009 T-005 accepted; capture candidates for T-007
+- Date: 2026-11-25 | Status: accepted | By: user
+- Context: Desk research and independent review of global capture were complete; nothing is tested.
+- Decision: Corrected [T-005 results](../docs/research/T-005-global-capture.md) accepted and T-005 closed as a research task. For T-007: Raw Input is the preferred candidate to investigate, the low-level hook a possible comparison; a macOS feasibility test is part of it under the earlier conditions (D-007). "Enabled" capture is distinguished from demonstrated event reception.
+- Alternatives: none rejected permanently; this scopes tests and is no stack or architecture decision.
+- Consequences: Platform limits stay open until tested; support labels and any requirement change remain Product Owner decisions (suggested at Gate G2).
+
 ### D-008 Keyboard profile priorities
 - Date: 2026-11-25 | Status: accepted | By: user
 - Context: The owned keyboard is a Lemokey P1 Pro (75 %, ISO-DE, knob), not a TKL; no Moonlander is available.
