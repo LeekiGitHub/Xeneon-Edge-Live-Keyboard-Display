@@ -3,18 +3,26 @@
 > Single source for: latest session summary and the next action. Overwrite on each handoff.
 > Separate facts from assumptions. Task status belongs in [TASKS.md](TASKS.md), current state in [STATUS.md](STATUS.md).
 
-- Date: 2026-11-24
-- From: Claude Code (requirements author) -> To: planner/implementer for T-003
-- Task completed: T-002 (approved and closed by the user). Next: T-003 Decide tech stack and initial architecture
+- Date: 2026-11-25
+- From: Claude Code (T-004 author) -> To: researcher for T-005
+- Current task: T-004 closed; T-005 ready, not started
 
 ## Work Completed
-- Final approval of [PROJECT.md](PROJECT.md): scenarios and UI note confirmed, markers updated to `[C]`; first-launch UI language decided (OS language if supported, else English; D-005). T-002 moved to Done with criteria and review history.
+- Gate G1 adjustments applied to the [evaluation frame](../docs/research/T-004-evaluation-frame.md); T-004 moved to Done.
+- Keyboard profile priorities and license rule updated in PROJECT.md (D-007, D-008).
 
 ## Verification
-- Documentation-only; markers and links re-checked by search. No code or tests exist. Nothing committed.
+- Documentation only. Approved weights sum to 100. No web research, installs, prototypes, code or tests.
+- Checkpoint (2026-11-25): full diff reviewed, relative links, whitespace and personal-data patterns checked. Commit and push to `origin/main` approved by the user; confirm sync with `git status`.
 
-## T-003 Input (see PROJECT.md section 8 for the full list)
-- Facts: Windows mandatory (M1/M2); cross-platform preferred if feasible; opt-in system-wide capture with strict separation from training data (NF-Privacy, D-003); aggregates only unless approval; performance targets preliminary.
-- T-003 must deliver for approval: stack recommendation with independent review (D-004), feasibility of global input capture per OS, event model and lost-event handling, performance measurement method with reference hardware and proposed limits, aggregate sufficiency for adaptive training, storage format, keyboard-profile format (KLE evaluation), "reasonable effort" criteria, dependency license constraints.
-- Remaining `[O]`/`[P]` items are intentionally deferred to their phases.
-- Next action: user starts `plan` for T-003. Recommended: Advanced tier, high effort (cross-platform input capture feasibility), independent review by the other agent.
+## Open Issues
+- Hardware questions: [STATUS.md](STATUS.md).
+- Generic TKL: ISO/ANSI variants and knob undecided (M2 planning). M1 no longer contains an ANSI geometry profile (D-008).
+
+## Next Action: T-005 (start only on user request)
+- Recommended: Claude, Standard tier, high effort.
+- Scope and completion criteria: T-005 in [TASKS.md](TASKS.md). Report: `docs/research/T-005-global-capture.md`.
+- Read first: report sections 2 (KO-1..KO-4), 4 (E5) and 6 only as needed.
+- Use current official documentation with URL and access date; mark evidence levels; nothing is `VER` without a test here.
+- State per platform whether a macOS prototype (T-007) is justified. Linux stays unverified.
+- Keyboard firmware behaviour belongs to T-006. No stack preference, installs or prototypes.

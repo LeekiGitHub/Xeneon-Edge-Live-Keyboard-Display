@@ -2,6 +2,7 @@
 
 > Goals, requirements, constraints, success criteria. Change only with user (Product Owner) approval.
 > Status: APPROVED baseline (T-002 closed 2026-11-24 by the Product Owner). Review findings and their handling: [TASKS.md](TASKS.md#independent-requirements-review-2026-11-24-codex).
+> Approved amendments 2026-11-25: D-006, D-007, D-008 in [DECISIONS.md](DECISIONS.md).
 > Markers: `[C]` confirmed by the Product Owner | `[P]` agent proposal, not confirmed | `[O]` open decision (owner and phase in section 8).
 > A marker on a bullet overrides the section marker; unmarked bullets inherit it. Only `[C]` items are binding.
 > Product requirements only. Tech stack, architecture and storage technology are decided in T-003.
@@ -20,6 +21,8 @@
 - Input: touch, mouse and keyboard.
 - Setup A (primary, M1/M2): whole app, incl. training and optional keyboard view, fullscreen on the Xeneon Edge.
 - Setup B (later): training on the main monitor; Xeneon Edge shows keyboard view and statistics; configuration on the main monitor also desired.
+- Owned test keyboards: Lemokey P1 Pro (75 %, ISO-DE, rotary knob), Kinesis Advantage360 SmartSet (not Pro), ZSA Voyager. No Moonlander: its profile is still built but marked not hardware-verified until tested.
+- Test platforms: Windows 11 (primary, Xeneon Edge connected) and a real Mac (Apple M4); no confirmed Linux system (Linux is researched first and labelled unverified). Current hardware constraints: [STATUS.md](STATUS.md).
 
 ## 3. Functional Requirements
 ### F1 Live Keyboard Viewer [C]
@@ -48,7 +51,11 @@
 - Visual aids/finger assignments for different geometries, methodology, scoring, adaptive algorithms: research [O].
 
 ### F6 Keyboard Profiles and Layout System [C]
-- Vendor-independent. Prebuilt: (1) TKL with rotary knob (Keychron/Lemokey-inspired), ISO-DE and ANSI-US; (2) ZSA Moonlander; (3) ZSA Voyager; (4) Kinesis Advantage360.
+- Vendor-independent. Prebuilt profiles:
+  - M1: Lemokey P1 Pro (75 %, ISO geometry, rotary knob); Kinesis Advantage360 SmartSet.
+  - M2 (in addition): ZSA Voyager; ZSA Moonlander (not hardware-verified until tested); generic TKL.
+- Physical geometry (e.g. ISO, ANSI) is distinct from the logical key layout (e.g. QWERTZ-DE, QWERTY-US).
+- Physical geometry variants (ISO/ANSI) and rotary knob of the generic TKL profile. [O]
 - Faithful physical geometry (split boards, thumb clusters, varying key sizes, rotary knobs).
 - Prebuilt profiles, manual legend remapping, saved custom profiles. App-only: never changes keyboard firmware.
 - Four independently configurable concepts: physical geometry, key layout (legends), training language, finger assignment. Example: English text on a German QWERTZ board.
@@ -97,7 +104,11 @@ Two strictly separated data paths:
 
 ### NF-Platforms [C]
 - Windows: mandatory for M1 and M2. macOS and Linux: desired, not acceptance criteria for M1/M2.
-- Cross-platform implementation is preferred if T-003 shows it is feasible with reasonable effort ([O]: T-003 proposes the criteria, Product Owner approves). No Windows-only stack chosen prematurely; no platform support promised before feasibility is verified.
+- Cross-platform implementation is preferred if T-003 shows it is feasible with reasonable effort (criteria approved 2026-11-25: [T-004 section 4](../docs/research/T-004-evaluation-frame.md); feasibility [O]). No Windows-only stack chosen prematurely; no platform support promised before feasibility is verified. Officially promised support requires a real, suitable test system.
+
+### NF-Cost [C]
+- M1/M2: no additional recurring costs; no mandatory paid API, hosting, central user accounts, paid cloud infrastructure or code-signing costs; no AI spend beyond existing subscriptions. Prefer free frameworks and libraries.
+- A paid option with significant advantages or technical necessity is submitted to the Product Owner separately.
 
 ### NF-Data [C]
 - Local standalone app; no mandatory account or server. Stored locally: profiles, settings, results, statistics, learning progress. Import/export desirable.
@@ -106,6 +117,7 @@ Two strictly separated data paths:
 
 ### NF-Public Project [C]
 - Public GitHub repo; clear docs, understandable installation, legally clean libraries/fonts/graphics/texts, suitable license (Product Owner decides), no personal data/credentials, ideally no mandatory paid services.
+- GPL/AGPL technologies may be researched; integrating them into the shipped product requires explicit Product Owner approval after reviewing the obligations. License rules: [T-004 section 5](../docs/research/T-004-evaluation-frame.md).
 
 ## 5. Scope and Milestones [C]
 M1 is the first technical development state. M2 is the complete MVP and builds **cumulatively** on M1: all M1 functions and quality requirements remain part of M2 and are not re-listed. Build order within a milestone may be proposed by agents (T-003/planning).
@@ -114,11 +126,11 @@ M1 is the first technical development state. M2 is the complete MVP and builds *
 |---|---|
 | Basic modern minimalist UI, 2560x720 | M1 |
 | System-wide live visualization (opt-in) | M1 |
-| Profiles TKL (ISO-DE, ANSI-US) + Advantage360 | M1 |
+| Profiles Lemokey P1 Pro + Advantage360 SmartSet | M1 |
 | Manual legend mapping, persistent profiles | M1 |
 | Speed Test DE/EN (minimum result, see M1 acceptance) | M1 |
 | Local storage; i18n foundation | M1 |
-| Moonlander + Voyager | M2 |
+| Profiles Voyager, Moonlander, generic TKL | M2 |
 | Academy (fixed lessons + first adaptive exercises) | M2 |
 | Endless Training; Text/Quote Training (legal content) | M2 |
 | Long-term statistics with filters (incl. layout) | M2 |
@@ -144,7 +156,7 @@ M1 is the first technical development state. M2 is the complete MVP and builds *
 ### M1 acceptance
 Verifiable [C]:
 - Windows: app starts fullscreen on a 2560x720 secondary display with a cleanly scaled UI, no clipped or overlapping elements, while another app has focus.
-- Live view for TKL (ISO-DE, ANSI-US) and Advantage360 highlights pressed keys system-wide; normal typing in the other app is unaffected.
+- Live view for Lemokey P1 Pro and Advantage360 SmartSet highlights pressed keys system-wide; normal typing in the other app is unaffected.
 - Simultaneous keys and pressed/held/released states are correct; highlights clear after interruptions (e.g. focus change, lost events). Numeric targets (NF-Performance) are reported, not pass/fail.
 - Manual legend mapping; custom profiles persist across restarts.
 - Speed Test in German and English: random words, timed run, WPM, accuracy, error evaluation; result persists after restart.
@@ -157,7 +169,7 @@ Verifiable [C]:
 - Beginner path with fixed lessons and adaptive exercises; minimum path coverage defined in M2 planning; progress saved; after recorded weaknesses, a targeted exercise emphasizes the weak keys.
 - Endless Training runs without time limit, keeps supplying new content and ends only when the user ends it.
 - Text/Quote Training: every content item has recorded source, license and attribution.
-- All four keyboard models; QWERTZ-DE and QWERTY-US; geometry, layout, language and finger assignment independently configurable.
+- All five keyboard profiles (F6), Moonlander marked as not hardware-verified unless tested; QWERTZ-DE and QWERTY-US; geometry, layout, language and finger assignment independently configurable.
 - Keyboard view toggleable during exercises; exercises work without system-wide capture.
 - Statistics filterable by keyboard profile, layout, language, mode, time range; trends over time shown.
 - Light/Dark mode; adjustable font size; complete DE/EN UI selectable independently of training language; on first launch the UI language follows a supported OS language, otherwise English, and is manually changeable.
@@ -179,7 +191,7 @@ Subjective: high-quality modern minimalist premium UI/UX (essential, not optiona
 
 | Phase | Open item |
 |---|---|
-| T-003 (research, then approval) | Cross-platform feasibility and "reasonable effort" criteria; tech stack; event model (position vs. character vs. OS event, lost-event handling); window focus/touch/multi-monitor incl. Setup B feasibility; performance measurement method, reference hardware, numeric limits; whether aggregates suffice for adaptive training (see NF-Privacy); storage technology, schema versioning, export/import format; keyboard-profile format incl. KLE evaluation; i18n mechanism; font/asset licensing; license constraints from dependencies (license itself: Product Owner) |
+| T-003 (research, then approval) | Cross-platform feasibility (effort criteria approved, D-007); tech stack; event model (position vs. character vs. OS event, lost-event handling); window focus/touch/multi-monitor incl. Setup B feasibility; performance measurement method, reference hardware, numeric limits; whether aggregates suffice for adaptive training (see NF-Privacy); storage technology, schema versioning, export/import format; keyboard-profile format incl. KLE evaluation; i18n mechanism; font/asset licensing; license constraints from dependencies (license itself: Product Owner) |
 | M1 planning | Speed test durations/options/error handling; project name |
-| M2 planning | Adaptive algorithm design; lesson content structure and minimum path coverage; finger-assignment aids; touch-target size |
+| M2 planning | Adaptive algorithm design; lesson content structure and minimum path coverage; finger-assignment aids; touch-target size; generic TKL variants |
 | Later | Priority of non-Xeneon displays; Setup B; editor scope; password-field detection |

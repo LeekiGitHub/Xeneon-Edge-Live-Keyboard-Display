@@ -22,6 +22,8 @@
 ## Repository Layout
 - `AGENTS.md` - shared agent instructions (`CLAUDE.md` imports it)
 - `brain/` - shared project memory (Obsidian vault; `brain/.obsidian/` is git-ignored)
+- `docs/research/` - research reports (D-006)
+- `prototypes/` - approved throwaway feasibility prototypes, separate from the app (D-006; not yet created)
 - Source code: OPEN
 
 ## Conventions

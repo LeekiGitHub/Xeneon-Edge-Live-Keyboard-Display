@@ -7,14 +7,119 @@
 > Move finished tasks to "Done" with their acceptance criteria and verification results (see AGENTS.md, section 5).
 
 ## Active
-_None._
-
-## Backlog
 
 ### T-003 Decide tech stack and initial architecture
-- Priority: P2 | Status: todo (unblocked, not started) | Owner: OPEN
+- Priority: P2 | Status: active (plan approved, D-006; Gate G1 passed, D-007; next T-005) | Owner: Claude Code (planner)
 - Acceptance criteria:
   - [ ] Stack and components in [ARCHITECTURE.md](ARCHITECTURE.md), rationale in [DECISIONS.md](DECISIONS.md)
+- Additional criteria (from [PROJECT.md](PROJECT.md) section 8 and D-004; approved with the plan 2026-11-25):
+  - [ ] Every T-003 open item in PROJECT.md section 8 is answered, or explicitly deferred with Product Owner approval
+  - [ ] Findings that drive the decision carry an evidence level and source
+  - [ ] Independent review by the non-authoring agent, findings dispositioned
+  - [ ] Product Owner approval of the recommendation
+
+#### Plan rules (approved)
+- One subtask per session, in dependency order. Stop at each gate for the Product Owner.
+- Evidence levels: `VER` verified here (environment, steps, result) | `DOC` official documentation (URL, version, access date) | `SEC` secondary/community source | `HYP` assumption.
+- Reports: `docs/research/T-###-<topic>.md` (English) with sources, access date, evidence level and limitations; `brain/` keeps summaries and links; load reports only when needed.
+- No stack preference before T-008. Prototypes need explicit approval, live under `prototypes/`, are separate from the app and never its base.
+- Installing anything needs approval first, with a list of what, why and size.
+- Prototypes store no system-wide key histories or private input; capture prototypes are started manually and use no network; reports contain findings, not typed input.
+- Real test systems: Windows and macOS. Without verification (currently Linux) no support is promised.
+- Model plan is a flexible recommendation: Standard by default; agents recommend (never perform) a model switch, with a reason; respect both providers' usage quotas.
+
+#### Technical risks (all `HYP` until researched; impact = effect on architecture or requirements)
+| ID | Risk | Impact | Task |
+|---|---|---|---|
+| TR-1 | Firmware-handled keys (layer/Fn, macros, onboard remaps) may send nothing or identical codes, so a faithful live view of every physical key may be impossible from OS events | Critical (may change requirements) | T-006, T-007 |
+| TR-2 | Global capture differs fundamentally per OS: Wayland may offer no passive unprivileged path; macOS needs user permissions and blocks some input | Critical | T-005 |
+| TR-3 | Windows capture limits: elevated windows, secure desktop, lock screen, silently dropped hooks, lost key-up, knob/media events | Critical | T-005, T-007 |
+| TR-4 | Capture code resembles a keylogger: leaks via logs, crash dumps, IPC or dependencies; antivirus false positives | High | T-005, T-012, T-013 |
+| TR-5 | Touch on a secondary display may steal focus or move the cursor; mixed DPI, fullscreen placement | High | T-008, T-009 |
+| TR-6 | UI framework may throttle unfocused windows, miss latency targets or use too many resources | High | T-008, T-009 |
+| TR-7 | Training path needs position plus character (dead keys, AltGr, IME); framework key APIs may be insufficient | High | T-006, T-009 |
+| TR-8 | Aggregates may not suffice for adaptive training (privacy vs. function) | Medium-High | T-010 |
+| TR-9 | Word lists, texts, fonts or dependencies may conflict with the public repo or the chosen license | Medium (word lists block M1) | T-004, T-012 |
+| TR-10 | Signing/notarization costs and permission-sensitive packaging vs. "no mandatory paid services" | Medium | T-012 |
+| TR-11 | Global capture is hard to test automatically; weak tooling raises AI-agent iteration cost | Medium | T-008, T-012 |
+
+#### Subtasks (`todo` unless stated; Tier = recommended agent, model tier / effort)
+Order: T-004 -> T-005, T-006 -> T-007 -> T-008 -> T-009 -> T-010, T-011, T-012 -> T-013. T-010 and the content part of T-012 only depend on T-004 and may be pulled forward.
+
+T-004 is done (see Done). Assess options only with its [evaluation frame](../docs/research/T-004-evaluation-frame.md).
+
+##### T-005 Global capture feasibility (Windows, macOS, X11, Wayland)
+- Tier: Claude, Standard / high | Depends: T-004
+- Questions: Which APIs allow passive background capture? Required permissions/privileges? What is invisible (protected contexts)? Press/release/repeat, device identity, rotary events? How is state recovered after lost events? Security implications?
+- Done when:
+  - [ ] Capability matrix per OS with evidence levels and sources
+  - [ ] Per OS: feasible / conditional / not feasible / unknown, with reason
+  - [ ] List of claims that need a prototype
+
+##### T-006 Event model and keyboard behaviour
+- Tier: Claude, Standard / high | Depends: T-004
+- Questions: How do physical position, scan/HID code, logical key and character relate per OS? What do the profiled keyboards (Lemokey P1 Pro, Advantage360 SmartSet, Voyager, Moonlander without test hardware, generic TKL) actually send (layers, thumb keys, duplicates, knob)? What can the live view not know, and how should profiles express that? Which limits are stack-independent (KO-1) and affect product requirements? What does the focused training path need?
+- Done when:
+  - [ ] Stack-independent conceptual event model, incl. lost-event handling and the privacy boundary between both data paths
+  - [ ] Limitation list per keyboard model; requirement conflicts raised to the Product Owner
+
+##### T-007 Prototype P1: Windows capture
+- Tier: Codex, Standard / high | Depends: T-005, T-006
+- macOS variant (approved for the plan, D-007): only if prior research justifies it; after Windows; separate approvals for installs and for execution. Record Mac model and macOS version first.
+- Questions: Verify TR-1 and TR-3: candidate APIs with a foreground app, elevated window, UAC/lock screen, key bursts, hold/repeat, AltGr, knob; behaviour of installed antivirus.
+- Preference: use tools already shipped with Windows; no install unless shown necessary.
+- Done when:
+  - [ ] Test protocol with `VER` results on the user's hardware
+  - [ ] Go/no-go and requirement clarifications decided (Gate G2)
+
+##### T-008 Stack candidates (desk research)
+- Tier: Claude, Standard / high | Depends: T-004, T-007
+- Questions: Which candidates (web-based, native cross-platform, Windows-only as reference) pass the knock-out criteria? Maintenance, license, native integration, window/touch control, UI quality, i18n, testing, packaging, AI-agent suitability?
+- Done when:
+  - [ ] Longlist scored against T-004 criteria with sources
+  - [ ] At most 2-3 finalists and a prototype install list approved (Gate G3)
+
+##### T-009 Prototype P2: window, touch, rendering, performance
+- Tier: Codex, Standard / high | Depends: T-008
+- macOS variant (approved for the plan, D-007): only if prior research justifies it; after Windows; separate approvals for installs and for execution.
+- Blocker for touch tests: Xeneon Edge touch does not work ([STATUS.md](STATUS.md)). Interpret performance results against the high-end test PC.
+- Questions: Verify TR-5, TR-6, TR-7 with identical scenarios per finalist. How are latency, frame rate and resource use measured reproducibly?
+- Done when:
+  - [ ] Measurement method defined before measuring (endpoints, reference hardware, workload, sampling)
+  - [ ] `VER` results per finalist on the Xeneon Edge
+  - [ ] Numeric performance limits proposed to the Product Owner
+
+##### T-010 Training data sufficiency
+- Tier: Claude or Codex, Standard / high | Depends: T-004
+- Questions: What evidence supports touch-typing and adaptive-practice methods? Which metrics do they need? Do aggregates suffice, and which granularity is data-minimal?
+- Scope: only what affects data model and privacy; algorithm, lessons and finger assignment stay in M2 planning.
+- Done when:
+  - [ ] Sources rated by evidence strength
+  - [ ] Aggregate data set proposed; any exception submitted for explicit approval
+
+##### T-011 Persistence, profile format, i18n
+- Tier: Claude or Codex, Standard / medium | Depends: T-006, T-008, T-010
+- Questions: Storage technology, schema versioning, export/import? Own profile format vs. KLE compatibility? i18n mechanism?
+- Done when:
+  - [ ] Options compared and recommendation per item
+  - [ ] Profile format shown to express split geometry, knob and the four independent concepts (F6) on paper
+
+##### T-012 Licensing, distribution, testability
+- Tier: Claude or Codex, Standard / medium | Depends: T-004 (content), T-008 and T-009 (distribution)
+- Questions: Which DE/EN word lists, text sources and fonts are redistributable? Dependency license obligations? Windows install, signing, antivirus; effort for macOS/Linux? What can be tested in CI?
+- Done when:
+  - [ ] Source/license table with attribution duties
+  - [ ] Distribution and test strategy for the finalists, incl. costs
+
+##### T-013 Synthesis, review, approval
+- Tier: Claude, Advanced / high if the extra effort is justified; final architecture review: Codex, Standard / high | Depends: T-004..T-012
+- Done when:
+  - [ ] Recommendation with alternatives, residual risks and confidence in ARCHITECTURE.md and DECISIONS.md
+  - [ ] All decision-relevant knock-out criteria sufficiently clarified before the final decision (D-007)
+  - [ ] Independent review dispositioned; Product Owner approval (Gate G4)
+
+## Backlog
+_None._
 
 ## Done
 ### T-001 Set up shared agent memory
@@ -67,3 +172,13 @@ The draft covers the main product goals and separates a first development milest
 | R-07 | Adopted at final approval: first launch follows a supported OS language, else English; manually changeable | NF-i18n, M2 acceptance |
 
 Final approval (2026-11-24, user): R-03/R-04 scenarios and the UI note on capture limits confirmed and relabelled `[C]`.
+
+### T-004 Evaluation frame (subtask of T-003)
+- Status: done (2026-11-25, Gate G1 approved with adjustments) | Owner: Claude Code (author), user (approver)
+- Tier: Claude, Standard / medium | Depends: plan approval
+- Questions: Which criteria and weights decide the stack? What is "reasonable effort" for macOS/Linux? Which dependency licenses and costs are acceptable? Which hardware and OSes are available for testing?
+- Acceptance criteria:
+  - [x] Criteria, knock-out conditions and measurable "reasonable effort" criteria approved by the Product Owner (Gate G1)
+  - [x] Test hardware inventory recorded
+- Result: [report](../docs/research/T-004-evaluation-frame.md) (G1 changes in its section 7); D-007, D-008.
+- Verification (2026-11-25): hardware and display values by read-only Windows queries plus Product Owner statements; approved weights sum to 100. Weights and thresholds are judgement calls. No web research, tests or independent review (final review is part of T-013).
